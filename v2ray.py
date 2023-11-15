@@ -52,6 +52,11 @@ class V2Ray:
                 f"\"alterId\":{alert_id}",
                 "\"disableInsecureEncryption\":false"
             ]
+        elif protocol == 'trojan':
+            _data = [
+                f"\"level\":0",
+                "\"decryption\":\"none\",\"fallbacks\":[]"
+            ]
         else:
             protocol = 'vless'
             _data = [
@@ -67,6 +72,8 @@ class V2Ray:
         if request['success'] is True:
             if protocol == 'vmess':
                 server = f"vmess://{str(urllib.parse.quote(json.dumps({'add': self.ip, 'aid': alert_id, 'host': '', 'id': id, 'net': 'ws', 'path': '', 'port': port, 'ps': remark, 'scy': 'auto', 'sni': '', 'tls': 'none', 'type': '', 'v': '2'})))}"
+            elif protocol == 'trojan':
+                server = f"trojan://{id}@{self.ip}:{port}?security=tls&alpn=http/1.1&headerType=none&type=tcp&sni={self.ip}#{remark}"
             else:
                 server = f"vless://{id}@{self.ip}:{port}?path=%2F&security=none&encryption=none&type=ws#{remark}"
             result = {
